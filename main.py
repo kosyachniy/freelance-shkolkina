@@ -1,5 +1,7 @@
 import json
 
+from fastapi import FastAPI
+from pydantic import BaseModel
 import Levenshtein
 
 
@@ -9,7 +11,13 @@ with open('sets.json', 'r') as file:
 	CITIES = sets['cities']
 
 
+app = FastAPI(title="Cities")
 cities = list(map(lambda i: i.lower(), CITIES))
+
+
+class CityInput(BaseModel):
+	city: str
+
 
 def find(word):
 	word = word.lower()
@@ -29,4 +37,6 @@ def find(word):
 	return result.title()
 
 
-print(find(input()))
+@app.post('/')
+async def add(req: CityInput):
+	return find(req.city)
