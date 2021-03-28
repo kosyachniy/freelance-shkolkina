@@ -1,0 +1,32 @@
+version: "3"
+services:
+  shkolkina_api:
+    build:
+      dockerfile: ./docker/api/Dockerfile
+      context: ../
+    container_name: "shkolkina_api"
+    restart: unless-stopped
+
+  shkolkina_server:
+    image: "nginx:1.19.6"
+    container_name: "shkolkina_server"
+    restart: unless-stopped
+    volumes:
+      - "./server/nginx.prod.conf:/etc/nginx/nginx.conf"
+      - "./certbot/conf:/etc/letsencrypt"
+      - "./certbot/www:/var/www/certbot"
+    depends_on:
+      - shkolkina_api
+    ports:
+      - '8001:8001'
+      - '9444:9444'
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  shkolkina_certbot:
+    image: certbot/certbot
+    container_name: "shkolkina_certbot"
+    restart: unless-stopped
+    volumes:
+      - "./certbot/conf:/etc/letsencrypt"
+      - "./certbot/www:/var/www/certbot"
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"

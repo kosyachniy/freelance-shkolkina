@@ -1,0 +1,12 @@
+version: "3"
+services:
+  api:
+    build:
+      dockerfile: ./docker/api/Dockerfile
+      context: ../
+    container_name: "api"
+    restart: unless-stopped
+    volumes:
+      - "../main.py:/main.py" # Hot reload
+    ports:
+      - '5000:5000'
