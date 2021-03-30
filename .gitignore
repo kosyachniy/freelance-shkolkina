@@ -13,6 +13,7 @@ __pycache__/
 # Keys & sets
 keys*
 .env*
+credentials.json
 
 # Environments
 env/

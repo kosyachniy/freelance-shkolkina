@@ -4,3 +4,5 @@ fastapi==0.63.0
 uvicorn==0.13.4
 httptools==0.1.1 # For routing
 python-Levenshtein==0.12.2
+google-api-python-client==2.0.2
+oauth2client==4.1.3
