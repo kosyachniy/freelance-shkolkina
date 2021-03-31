@@ -11,8 +11,10 @@ from google_sheets import read
 with open('sets.json', 'r') as file:
 	sets = json.loads(file.read())
 	APPROXIMATION = sets['approximation']
-	CITIES = sets['cities']
 	SHEET = sets['sheet']
+
+with open('cities.json', 'r') as file:
+	CITIES = json.loads(file.read())
 
 
 app = FastAPI(title="Cities")
@@ -48,12 +50,22 @@ async def add(req: CityInput):
 
 while True:
 	try:
-		cities = read(SHEET, 'Лист1', 1, 2, 1, 1000)
+		cities_new = read(SHEET, 'Лист1', 1, 2, 1, 1000)
 	except Exception as e:
 		print('ERROR `read`', e)
 		time.sleep(1)
 		continue
 
-	print([i[0] for i in cities if len(i)])
+	try:
+		cities_new = [i[0] for i in cities_new if len(i)]
+	except Exception as e:
+		print('ERROR `convert` for {}'.format(cities_new), e)
+	else:
+		if cities_new != CITIES:
+			CITIES = cities_new
+			cities = list(map(lambda i: i.lower(), CITIES))
+
+			with open('cities.json', 'w') as file:
+				print(json.dumps(CITIES, ensure_ascii=False, indent='\t'), file=file)
 
 	time.sleep(60)
