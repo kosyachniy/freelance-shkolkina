@@ -1,4 +1,11 @@
 # API для подбора городов
+## Ссылки
+[Telegram бот](https://t.me/shkolkina_bot)
+
+[Список городов](https://docs.google.com/spreadsheets/d/1yUulEeriEhSdnLm2b7Nq1EeggaQII25K8-SoHSzyVsw/edit#gid=0)
+
+BotMather: [настройки](https://app.botmother.com/bot/604ef45dfb4c134da43bf9e3/settings/), [конструктуор](https://app.botmother.com/bot/604ef45dfb4c134da43bf9e3/constructor/)
+
 ## Документация
 [https://shkolkina.kosyachniy.com:9444/docs](https://shkolkina.kosyachniy.com:9444/docs)
 

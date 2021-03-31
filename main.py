@@ -74,7 +74,7 @@ def find(word):
 
 
 @app.post('/')
-async def add(req: CityInput):
+async def check(req: CityInput):
 	global LOCK
 
 	if LOCK:
