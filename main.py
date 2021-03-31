@@ -14,22 +14,26 @@ with open('sets.json', 'r') as file:
 	APPROXIMATION = sets['approximation']
 	SHEET = sets['sheet']
 
-with open('cities.json', 'r') as file:
-	CITIES = json.loads(file.read())
-
 LOCK = True
 
 
 app = FastAPI(title="Cities")
-cities = list(map(lambda i: i.lower(), CITIES))
 
 
 class CityInput(BaseModel):
 	city: str
 
 
+def get_cities():
+	with open('cities.json', 'r') as file:
+		cities = json.loads(file.read())
+
+	return list(map(lambda i: i.lower(), cities))
+
 def background():
 	while True:
+		cities = get_cities()
+
 		try:
 			cities_new = read(SHEET, 'Лист1', 1, 2, 1, 1000)
 		except Exception as e:
@@ -42,12 +46,11 @@ def background():
 		except Exception as e:
 			print('ERROR `convert` for {}'.format(cities_new), e)
 		else:
-			if cities_new != CITIES:
-				CITIES = cities_new
-				cities = list(map(lambda i: i.lower(), CITIES))
+			cities_proc_new = list(map(lambda i: i.lower(), cities_new))
 
+			if cities_proc_new != cities:
 				with open('cities.json', 'w') as file:
-					print(json.dumps(CITIES, ensure_ascii=False, indent='\t'), file=file)
+					print(json.dumps(cities_new, ensure_ascii=False, indent='\t'), file=file)
 
 		time.sleep(600)
 
@@ -55,6 +58,7 @@ def find(word):
 	word = word.lower()
 	result = None
 	dist = None
+	cities = get_cities()
 
 	for city in cities:
 		dist_cur = Levenshtein.distance(word, city)
