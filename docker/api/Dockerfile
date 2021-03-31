@@ -14,8 +14,11 @@ RUN pip install -r requirements.txt
 
 # Copy project
 COPY ./main.py .
+COPY ./google_sheets.py .
 COPY ./run.sh .
 COPY ./sets.json .
+COPY ./credentials.json .
+COPY ./cities.json .
 
 # Run
 CMD bash run.sh
